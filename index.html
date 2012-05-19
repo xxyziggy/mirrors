@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script src="math.js"></script>
+        <script src="tools.js"></script>        
+        <script src="draw.js"></script>
+        <script>
+            window.onload = function() {
+                canvas = document.getElementById("myCanvas");
+                context = canvas.getContext("2d");
+                
+                width  = 640;
+                height = 480;
+                
+                var borders = [
+                    new math.Segment(10, 10, 10, height - 10),
+                    new math.Segment(width - 10, 10, width - 10, height - 10),
+                    new math.Segment(10, 10, width -10, 10),
+                    new math.Segment(10, height - 10, width - 10, height - 10),
+                    
+                    new math.Segment(320, 240, 520, 140),
+                    new math.Segment(520, 140, 520, 340),
+                    new math.Segment(520, 340, 320, 240)
+                ];
+                
+                var points = [];
+                var gen = new LineGenerator(new math.Segment (60, 20, 50, 30), 1000, 100);
+                
+                borders.push(new math.Circle(320, 240, 100));
+                
+                function proceedPoints(){
+                    for (var i = 0; i < points.length; i++){
+                        for (var j = 0; j < borders.length; j++) {
+
+                            if (borders[j].intersects(points[i].seg(5))) {
+                                points[i].vector = points[i].vector.reflect(borders[j].norm(points[i]))
+                            }
+                        }
+                        points[i].x += points[i].vector.x;
+                        points[i].y += points[i].vector.y;
+                    }
+                }
+                
+                setInterval(function(){
+                    var p = gen.generate(-1, 50);
+                    if (p.length > 0){
+                        points = points.concat(p);
+                    }
+                    
+                    canvas.width = canvas.width;
+                    context.fillText(points.length, 320, 240);
+                    gen.draw('blue');
+                    
+                    proceedPoints();
+                    
+                    for (var i = 0; i < borders.length; i++){
+                        borders[i].draw('red');
+                    }
+
+                    for (var i = 0; i < points.length; i++){
+                        points[i].draw('black');                 
+                    }
+                    
+                    
+                }, 1);
+            };
+
+        </script>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="640" height="480"></canvas>
+    </body>
+</html>
