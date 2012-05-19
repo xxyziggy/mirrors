@@ -40,6 +40,20 @@ math.Circle.prototype.draw = function(color) {
     drawCircle(this.x, this.y, this.r, color);
 }
 
+phys.Reflector.prototype.draw = function(color) {
+    for (var i = 0; i < this.items.length; i++){
+        this.items[i].draw(color);
+    }
+}
+
+phys.Lens.prototype.draw = function(color) {
+    this.segment.draw(color);
+    var lnorm = this.segment.norm().scale(this.segment.length());
+    
+    line (this.segment.middle().x - lnorm.x, this.segment.middle().y - lnorm.y,
+          this.segment.middle().x + lnorm.x, this.segment.middle().y + lnorm.y, 'grey');
+}
+
 LineGenerator.prototype.draw = function(color) {
     this.segment.draw(color);
 }

@@ -2,6 +2,7 @@
 <html>
     <head>
         <script src="math.js"></script>
+        <script src="phys.js"></script>
         <script src="tools.js"></script>        
         <script src="draw.js"></script>
         <script>
@@ -12,28 +13,29 @@
                 width  = 640;
                 height = 480;
                 
-                var borders = [
-                    new math.Segment(10, 10, 10, height - 10),
-                    new math.Segment(width - 10, 10, width - 10, height - 10),
-                    new math.Segment(10, 10, width -10, 10),
-                    new math.Segment(10, height - 10, width - 10, height - 10),
-                    
-                    new math.Segment(320, 240, 520, 140),
-                    new math.Segment(520, 140, 520, 340),
-                    new math.Segment(520, 340, 320, 240)
+                var objects = [
+                    new phys.Reflector([
+                        new math.Segment(10, 10, 10, height - 10),
+                        new math.Segment(width - 10, 10, width - 10, height - 10),
+                        new math.Segment(10, 10, width -10, 10),
+                        new math.Segment(10, height - 10, width - 10, height - 10),
+                    ]),
+                    new phys.Reflector([
+                        new math.Circle (width / 2, height / 2, 100)
+                    ])
                 ];
                 
                 var points = [];
-                var gen = new LineGenerator(new math.Segment (60, 20, 50, 30), 1000, 100);
-                
-                borders.push(new math.Circle(320, 240, 100));
+                var gen = new LineGenerator(new math.Segment (320, 200, 320, 280), 1000, 10);
                 
                 function proceedPoints(){
                     for (var i = 0; i < points.length; i++){
-                        for (var j = 0; j < borders.length; j++) {
-
-                            if (borders[j].intersects(points[i].seg(5))) {
-                                points[i].vector = points[i].vector.reflect(borders[j].norm(points[i]))
+                        for (var j = 0; j < objects.length; j++) {
+                            var pt = objects[j].collide(points[i]);
+                            if (pt) {
+                                points[i].vector = pt;
+                                points[i].x += points[i].vector.x;
+                                points[i].y += points[i].vector.y;                                
                             }
                         }
                         points[i].x += points[i].vector.x;
@@ -42,7 +44,7 @@
                 }
                 
                 setInterval(function(){
-                    var p = gen.generate(-1, 50);
+                    var p = gen.generate(-1, 10);
                     if (p.length > 0){
                         points = points.concat(p);
                     }
@@ -53,8 +55,8 @@
                     
                     proceedPoints();
                     
-                    for (var i = 0; i < borders.length; i++){
-                        borders[i].draw('red');
+                    for (var i = 0; i < objects.length; i++){
+                        objects[i].draw('red');
                     }
 
                     for (var i = 0; i < points.length; i++){

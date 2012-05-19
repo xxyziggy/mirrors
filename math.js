@@ -129,13 +129,17 @@ function math(){
             this.C = (x * x1.y - x1.x * y);
         }
         
+        this.vector = function(){
+            return new math.Vector(-this.B, this.A).norm();
+        }
+        
         this.norm = function(){
             return new math.Vector(this.A, this.B).norm();
         }
         
         this.distance = function (p){
             return Math.abs(p.x * this.A + p.y * this.B + this.C) / 
-            Math.sqrt(this.A * this.A + this.B * this.B);
+                   Math.sqrt(this.A * this.A + this.B * this.B);
         }
         
         this.intersection = function(line){
@@ -176,6 +180,10 @@ function math(){
         
         this.norm = function(){
             return this.line.norm();
+        }
+        
+        this.length = function(){
+            return math.length(this.a.x, this.a.y, this.b.x, this.b.y);
         }
         
         this.intersects = function(seg) {
@@ -246,7 +254,11 @@ function math(){
         
         this.seg = function(kl){
             var k = arguments.length == 1 ? kl : 1;
-            return new math.Segment(this.x, this.y, this.x + kl * this.vector.x, this.y + kl * this.vector.y);
+            return new math.Segment(this.x, this.y, this.x + k * this.vector.x, this.y + k * this.vector.y);
+        }
+        
+        this.toString = function(){
+            return "(" + this.x + "; " + this.y + ")";
         }
     }
 }
