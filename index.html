@@ -20,13 +20,23 @@
                         new math.Segment(10, 10, width -10, 10),
                         new math.Segment(10, height - 10, width - 10, height - 10),
                     ]),
-                    new phys.Reflector([
-                        new math.Circle (width / 2, height / 2, 100)
-                    ])
+                 /*   new phys.Reflector([
+                        new math.Circle (width / 2, height / 2, 50)
+                    ]),*/
                 ];
                 
+                var n = 5;
+                var delta = 2*Math.PI/n;
+                var r = 100;
+                for (var i = 0; i < n; i++){
+                    objects.push(new phys.Lens(new math.Segment (width / 2 + r * Math.cos(i * delta), 
+                                                                 height / 2 + r * Math.sin(i * delta),
+                                                                 width / 2 + r * Math.cos((i + 1) * delta), 
+                                                                 height / 2 + r * Math.sin((i + 1) * delta)), 0.01));
+                }
+                
                 var points = [];
-                var gen = new LineGenerator(new math.Segment (320, 200, 320, 280), 1000, 10);
+                var gen = new LineGenerator(new math.Segment (20, 220, 20, 260), 1000, 10);
                 
                 function proceedPoints(){
                     for (var i = 0; i < points.length; i++){
