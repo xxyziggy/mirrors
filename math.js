@@ -1,9 +1,17 @@
+/*
+ * Main module for geometry calculations (vector, lines, segments etc.)
+ * 
+ * Copyright: lanseg, 2012
+ */
 function math(){
+    
+    //Comparsion precision constant
     this.E = 0.0001;
     
     this.eq = function (a, b) {
         return Math.abs(a - b) < math.E;
     }
+    
     this.length = function(x, y, x1, y1) {
         var lx = 0;
         var ly = 0;
@@ -27,6 +35,10 @@ function math(){
         return x * y1 - y * x1;
     }
     
+    /* 
+     * Rectangular bounds. Can check if point is in bounds even if rectangle is
+     * degenerate (a line).
+     */
     this.Bounds = function (seg) {
         this.a = {
             x: Math.min(seg.a.x, seg.b.x),
@@ -56,6 +68,11 @@ function math(){
             
     }   
     
+    /*
+     * Vector in the geometric sence.
+     * Addition, scaling, scalar multiplication, projection and reflection
+     * by normal vector provided
+     */
     this.Vector = function(x, y) {
         
         this.x = x;
@@ -117,6 +134,13 @@ function math(){
         }
     }
     
+    /*
+     * A line. Defined by two points, stored in a canonical way (Ax + By + C = 0)
+     * 
+     * Supported operations: 
+     * Directing vector, normal vector, distance to point,
+     * line-line intersection check.
+     */
     this.Line = function(x, y, x1, y1){
 
         if (arguments.length == 4) {
@@ -139,7 +163,7 @@ function math(){
         
         this.distance = function (p){
             return Math.abs(p.x * this.A + p.y * this.B + this.C) / 
-                   Math.sqrt(this.A * this.A + this.B * this.B);
+            Math.sqrt(this.A * this.A + this.B * this.B);
         }
         
         this.intersection = function(line){
@@ -160,6 +184,14 @@ function math(){
         }
     }
     
+    /*
+     * A segment. Defined by two points, stored as a line with that points as 
+     * borders. 
+     * 
+     * Supported operations:
+     * length, middle point, segment-segment intersection check, random point 
+     * picker.
+     */
     this.Segment = function (x, y, x1, y1){
         
         this.line = new math.Line(x, y, x1, y1);
@@ -228,6 +260,11 @@ function math(){
         }
     }
     
+    /*
+     * Geometrical circle. 
+     * 
+     * Supported operations: normal and circle-segment intersection.
+     */
     this.Circle = function (x, y, r) {
         
         this.x = x;
@@ -247,6 +284,9 @@ function math(){
         
     }
     
+    /*
+     * A moving point. Defined by coordinates and vector of speed.
+     */
     this.DPoint = function (x, y, v) {
         this.vector = v;
         this.x = x;
@@ -266,6 +306,7 @@ function math(){
 (function(){
     math = new math();   
 
+    //Simple check after initialization.
     var s  = new math.Segment(0, 10, 10, 0);
     var s1 = new math.Segment(0, 0, 10, 10);
     

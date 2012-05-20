@@ -1,3 +1,7 @@
+/*
+ * Simple canvas drawing routines. 
+ * context is a global variable for canvas context
+ */
 function line (x, y, x1, y1, color){
     context.beginPath();
     context.moveTo(x, y);

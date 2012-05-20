@@ -1,11 +1,22 @@
+/* 
+ * Physical calculations: reflectors, refractors, lenses
+ * Copyright: lanseg, 2012
+ */
+
 function phys(){
     
-    
+    /*
+     * Reflector: a simple mirror. Defined by list of segments, that will reflect
+     * particles on collision.
+     */
     this.Reflector = function(items){
         
         this.items = items;
         
-        
+        /*
+         * Checks collision with a particle. Returns new vector of speed for particle
+         * on collision and boolean false otherwise.
+         */
         this.collide = function(dpoint) {
             for (var i = 0; i < this.items.length; i++){
                 if (this.items[i].intersects(dpoint.seg())) {
@@ -17,6 +28,10 @@ function phys(){
         }
     }
     
+    /*
+     * Lens - a model of optical object. Defined by segment and focal power,
+     * focal power can be positive or negative,
+     */
     this.Lens = function(segment, d){
         
         var middle = segment.middle();
@@ -40,6 +55,10 @@ function phys(){
                                      this.f1.x - this.segment.line.B,
                                      this.f1.y + this.segment.line.A)
         
+        /*
+         * Checks collision with a particle. Returns new vector of speed for particle
+         * on collision and boolean false otherwise.
+         */        
         this.collide = function(dpoint){
             if (this.segment.intersects(dpoint.seg())) {
                 

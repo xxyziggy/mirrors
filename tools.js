@@ -1,3 +1,12 @@
+/* 
+ * Particle generators, polygon drawers and other utility classes.
+ * Copyright: lanseg, 2012
+ */
+
+/*
+ * Simple particle generator. Defined by segment, maximum generated points and
+ * minimal delay in milliseconds between point generation
+ */
 function LineGenerator(segment, mp, delay){
     
     this.segment = segment;
@@ -6,6 +15,10 @@ function LineGenerator(segment, mp, delay){
     this.generated = 0;
     this.lastPTime = 0;
     
+    /*
+     * amount - number of DPoints to be randomly generated along the segment
+     * speed  - speed of each point
+     */
     this.generate = function(speed, amount) {
         var time = new Date().getTime();
         var k = arguments.length == 0 ? 1 : speed;
